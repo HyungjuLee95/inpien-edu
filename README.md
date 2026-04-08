@@ -34,6 +34,56 @@
     └── schema.sql
 ```
 
+## 원격 저장소 연동 & `git pull` 명령어
+
+> 아래에서 `<REMOTE_URL>` 과 `<BRANCH>` 는 본인 저장소 정보로 바꿔서 사용하세요.
+
+### A) 이미 프로젝트 폴더가 있고, 원격만 연결할 때
+
+```bash
+# 현재 폴더가 /workspace/inpien-edu 라는 가정
+cd /workspace/inpien-edu
+
+# 원격 확인
+git remote -v
+
+# 원격이 없다면 추가
+git remote add origin <REMOTE_URL>
+
+# 기본 브랜치 가져오기
+git fetch origin
+
+# 내 로컬 브랜치를 원격 브랜치와 연결
+# 예: git branch --set-upstream-to=origin/main main
+git branch --set-upstream-to=origin/<BRANCH> <BRANCH>
+
+# 최신 변경 가져오기
+git pull --rebase
+```
+
+### B) 원격 저장소를 처음부터 클론할 때
+
+```bash
+git clone <REMOTE_URL>
+cd <REPO_DIR>
+git checkout <BRANCH>
+git pull --rebase
+```
+
+### C) pull 충돌 시 빠른 처리
+
+```bash
+# 충돌 파일 확인
+git status
+
+# 파일 수정 후
+git add .
+git rebase --continue
+
+# rebase 취소
+git rebase --abort
+```
+
 ## 실행 방법 (Backend)
 
 ### 1) 의존성 설치
@@ -76,6 +126,13 @@ uvicorn app.main:app --reload
 - `GET/POST /items`
 - `GET/POST /locations`
 - `GET/POST /inventory/batches`
+
+## 최소 점검 명령어
+
+```bash
+# 문법 체크
+python -m compileall backend/app
+```
 
 ## 다음 단계 제안 (Phase 2)
 
